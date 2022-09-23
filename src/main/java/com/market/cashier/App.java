@@ -5,8 +5,9 @@ public class App
     public static void main( String[] args )
     {
         Products products = new Products();
-        products.showProducts();
-
-        products.addProduct("tets", "1", 10.0);
+        ShoppingCart sc = new ShoppingCart(products);
+        sc.addCart(10, 10);
+        sc.addCart(10, 1);
+        sc.showCart();
     }
 }

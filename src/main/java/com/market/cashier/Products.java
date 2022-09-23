@@ -12,14 +12,16 @@ import org.bson.conversions.Bson;
 
 public class Products {
 
-  private String url = "mongodb://localhost:27017";
+  //here you can set your local mongodb uri - the default is "mongodb://localhost:27017"
+  private String uri = "mongodb://localhost:27017";
   private MongoClient client;
   private MongoDatabase database;
   private MongoCollection<Document> products;
 
+  //Initializes the data base and connects to 27017 -> Market -> Products.
   Products() {
     try {
-      client = MongoClients.create(url);
+      client = MongoClients.create(uri);
       database = client.getDatabase("Market");
       products = database.getCollection("Products");
       System.out.println("Connected to database...");
@@ -28,16 +30,22 @@ public class Products {
     }
   }
 
+  //Shows all products that are in the database - sorted by id
   public void showProducts() {
     System.out.println("----------------");
-    System.out.println("Produtos:");
+    System.out.println("Products:");
     System.out.println("----------------");
-    MongoCursor cursor = this.products.find().iterator();
+    Bson filter = Filters.eq("id", 1);
+    MongoCursor cursor = this.products.find().sort(filter).iterator();
     try {
       while (cursor.hasNext()) {
         Document currentItem = ((Document) cursor.next());
         System.out.println(
-          currentItem.get("name") + " - $" + currentItem.get("price")
+          currentItem.get("id") +
+          ") " +
+          currentItem.get("ammount") + " / " + currentItem.get("name") +
+          " - $" +
+          currentItem.get("price")
         );
       }
     } finally {
@@ -101,5 +109,11 @@ public class Products {
     Random r = new Random();
     int newId = r.nextInt(100) + 1;
     if (this.hasId(newId)) return newUniqueId(); else return newId;
+  }
+
+  public Document getOneInfo(int id){
+      Bson filter = Filters.eq("id", id);
+      MongoCursor cursor = this.products.find(filter).iterator();
+      return (Document)cursor.next();
   }
 }
