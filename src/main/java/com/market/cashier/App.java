@@ -5,9 +5,8 @@ public class App
     public static void main( String[] args )
     {
         Products products = new Products();
-
         products.showProducts();
 
-        System.out.println(products.hasId(1));
+        products.addProduct("tets", "1", 10.0);
     }
 }
