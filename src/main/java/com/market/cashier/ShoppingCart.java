@@ -90,4 +90,20 @@ public class ShoppingCart {
     System.out.println("-----------------");
     System.out.println("Total: $" + totalValue);
   }
+
+  public void payCart() {
+    double totalValue = 0;
+    Iterator listQuantity = this.shoppingCart.entrySet().iterator();
+    while (listQuantity.hasNext()) {
+      Map.Entry quantityItem = (Map.Entry) listQuantity.next();
+      Document productInfo =
+        this.products.getOneInfo((int) quantityItem.getKey());
+      double itemPrice =
+        Double.parseDouble(quantityItem.getValue().toString()) *
+        ((Double) productInfo.get("price"));
+      totalValue += itemPrice;
+    }
+    this.shoppingCart.clear();
+    System.out.println("Purchcase made with a value of $" + totalValue);
+  }
 }
