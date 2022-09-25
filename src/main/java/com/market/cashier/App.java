@@ -19,15 +19,14 @@ public class App {
     do {
       System.out.print("Market/> ");
       userInput = scanner.nextLine();
-      if (!userInput.equals("exit")) {
+      if (!userInput.replace(" ", "").equals("exit")) {
         //Storage the user input in args[]
         String[] inputs = userInput.split(" ");
         if (inputs[0].equals("use")) {
           //Based in the "use ..." calls the "terminalCommands" function passing an Lambda with the commands for that choice.
           switch (inputs[1]) {
             case "owner":
-            if(products.loginOwner())
-              terminalCommands(
+              if (products.loginOwner()) terminalCommands(
                 (String[] commands, String command) -> {
                   switch (commands[0]) {
                     case "show":
@@ -37,17 +36,16 @@ public class App {
                       String[] parameters = command.split("\"");
 
                       if (parameters.length == 5) {
-                        try{
-                        String name = parameters[1];
-                        String description = parameters[3];
-                        double price = Double.parseDouble(
-                          parameters[4].replace(" ", "")
-                        );
-                        if (!(name == "" || description == "")) {
-                          products.addProduct(name, description, price);
-                        } else invalidCommand(command);
-                        }
-                        catch(Exception err){
+                        try {
+                          String name = parameters[1];
+                          String description = parameters[3];
+                          double price = Double.parseDouble(
+                            parameters[4].replace(" ", "")
+                          );
+                          if (!(name == "" || description == "")) {
+                            products.addProduct(name, description, price);
+                          } else invalidCommand(command);
+                        } catch (Exception err) {
                           invalidCommand(command);
                         }
                       } else {
@@ -99,8 +97,8 @@ public class App {
                       }
                       break;
                     case "pay":
-                    shoppingCart.payCart();
-                    break;
+                      shoppingCart.payCart();
+                      break;
                     default:
                       invalidCommand(command);
                       break;
@@ -115,7 +113,7 @@ public class App {
           }
         } else invalidCommand(userInput);
       } else System.out.println("Exiting market...");
-    } while (!userInput.equals("exit"));
+    } while (!userInput.replace(" ", "").equals("exit"));
   }
 
   //Prints the user input telling him that it isn't a valid command
@@ -136,9 +134,10 @@ public class App {
 
       if (!command.equals("exit") && args.length > 0) {
         func.accept(args, command);
-      } else System.out.println(
-        "exiting " + terminalPath.toLowerCase() + "..."
-      );
+      } else {
+        System.out.println("exiting " + terminalPath.toLowerCase() + "...");
+        if (terminalPath.equals("Owner")) products.logout();
+      }
     } while (!command.equals("exit"));
   }
 }

@@ -6,12 +6,15 @@ import java.util.Map;
 import org.bson.Document;
 
 public class ShoppingCart {
+
   private Map<Integer, Integer> shoppingCart;
   private Products products;
+  private String apliedCupom;
 
   public ShoppingCart(Products products) {
     this.shoppingCart = new HashMap<Integer, Integer>();
     this.products = products;
+    this.apliedCupom = null;
   }
 
   //Adds an item to shopping cart based on id
@@ -93,7 +96,12 @@ public class ShoppingCart {
       );
     }
     System.out.println("-----------------");
-    System.out.println("Total: $" + totalValue);
+    if (this.apliedCupom != null) {
+      System.out.println("Valor inicial: $" + totalValue);
+      double desconto = this.products.cupomValue(this.apliedCupom) * totalValue;
+      System.out.println("Desconto: $-" + desconto);
+      System.out.println("Valor final: $" + (totalValue - desconto));
+    } else System.out.println("Total: $" + totalValue);
   }
 
   public void payCart() {
@@ -109,6 +117,16 @@ public class ShoppingCart {
       totalValue += itemPrice;
     }
     this.shoppingCart.clear();
-    System.out.println("Purchcase made with a value of $" + totalValue);
+    System.out.println(
+      "Purchcase made with a value of $" +
+      (
+        totalValue *
+        (
+          this.apliedCupom == null
+            ? 1
+            : (1 - this.products.cupomValue(this.apliedCupom))
+        )
+      )
+    );
   }
 }
