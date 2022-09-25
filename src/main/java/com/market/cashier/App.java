@@ -36,15 +36,19 @@ public class App {
                       String[] parameters = command.split("\"");
 
                       if (parameters.length == 5) {
+                        try{
                         String name = parameters[1];
                         String description = parameters[3];
                         double price = Double.parseDouble(
                           parameters[4].replace(" ", "")
                         );
-
                         if (!(name == "" || description == "")) {
                           products.addProduct(name, description, price);
                         } else invalidCommand(command);
+                        }
+                        catch(Exception err){
+                          invalidCommand(command);
+                        }
                       } else {
                         invalidCommand(command);
                       }
@@ -83,9 +87,6 @@ public class App {
                         invalidCommand(command);
                       }
                       break;
-                    default:
-                      invalidCommand(command);
-                      break;
                     case "remove":
                       try {
                         int id = Integer.parseInt(commands[1]);
@@ -95,6 +96,12 @@ public class App {
                       } catch (Exception err) {
                         invalidCommand(command);
                       }
+                      break;
+                    case "pay":
+                    shoppingCart.payCart();
+                    break;
+                    default:
+                      invalidCommand(command);
                       break;
                   }
                 },
