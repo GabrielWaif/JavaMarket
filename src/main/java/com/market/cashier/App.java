@@ -35,14 +35,14 @@ public class App {
                     case "add":
                       String[] parameters = command.split("\"");
 
-                      if (parameters.length == 4) {
+                      if (parameters.length == 5) {
                         String name = parameters[1];
                         String description = parameters[3];
                         double price = Double.parseDouble(
                           parameters[4].replace(" ", "")
                         );
 
-                        if (!(name == "" || name == "")) {
+                        if (!(name == "" || description == "")) {
                           products.addProduct(name, description, price);
                         } else invalidCommand(command);
                       } else {
@@ -50,14 +50,13 @@ public class App {
                       }
                       break;
                     case "remove":
-                    try{
-                      int id = Integer.parseInt(commands[1]);
+                      try {
+                        int id = Integer.parseInt(commands[1]);
 
-                      products.removeProduct(id);
-                    }
-                    catch(Exception err){
-                      invalidCommand(command);
-                    }
+                        products.removeProduct(id);
+                      } catch (Exception err) {
+                        invalidCommand(command);
+                      }
                       break;
                     default:
                       invalidCommand(command);
@@ -73,6 +72,29 @@ public class App {
                   switch (commands[0]) {
                     case "show":
                       shoppingCart.showCart();
+                      break;
+                    case "add":
+                      try {
+                        int id = Integer.parseInt(commands[1]);
+                        int quantity = Integer.parseInt(commands[2]);
+
+                        shoppingCart.addToCart(id, quantity);
+                      } catch (Exception err) {
+                        invalidCommand(command);
+                      }
+                      break;
+                    default:
+                      invalidCommand(command);
+                      break;
+                    case "remove":
+                      try {
+                        int id = Integer.parseInt(commands[1]);
+                        int quantity = Integer.parseInt(commands[2]);
+
+                        shoppingCart.removeFromCart(id, quantity);
+                      } catch (Exception err) {
+                        invalidCommand(command);
+                      }
                       break;
                   }
                 },

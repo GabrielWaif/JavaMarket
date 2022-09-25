@@ -7,7 +7,6 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import java.util.Random;
-
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -44,12 +43,14 @@ public class Products {
         System.out.println(
           currentItem.get("id") +
           ") " +
-          currentItem.get("ammount") + " / " + currentItem.get("name") +
+          currentItem.get("ammount") +
+          " / " +
+          currentItem.get("name") +
           " - $" +
           currentItem.get("price")
         );
       }
-    }catch(Exception err){
+    } catch (Exception err) {
       System.out.println("Error showing products! try again.");
     } finally {
       cursor.close();
@@ -69,7 +70,7 @@ public class Products {
         System.out.println(name + " was successfully added to the database.");
         return true;
       } catch (Exception err) {
-        System.out.println(name+ " could not be added to the database!");
+        System.out.println(name + " could not be added to the database!");
         return false;
       }
     } else {
@@ -84,7 +85,9 @@ public class Products {
       try {
         Bson filter = Filters.eq("id", id);
         this.products.deleteOne(filter);
-        System.out.println(this.getOneInfo(id).get("name") + " was removed from products!");
+        System.out.println(
+          this.getOneInfo(id).get("name") + " was removed from products!"
+        );
         return true;
       } catch (Exception err) {
         System.out.println(id + " is not a valid id!");
@@ -115,9 +118,9 @@ public class Products {
     if (this.hasId(newId)) return newUniqueId(); else return newId;
   }
 
-  public Document getOneInfo(int id){
-      Bson filter = Filters.eq("id", id);
-      MongoCursor cursor = this.products.find(filter).iterator();
-      return (Document)cursor.next();
+  public Document getOneInfo(int id) {
+    Bson filter = Filters.eq("id", id);
+    MongoCursor cursor = this.products.find(filter).iterator();
+    return (Document) cursor.next();
   }
 }

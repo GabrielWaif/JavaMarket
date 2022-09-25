@@ -31,13 +31,18 @@ public class ShoppingCart {
           " was added to the shopping cart"
         );
         return true;
+      } else {
+        System.out.println("Not a valid id! please enter a valid one.");
       }
+    } else {
+      System.out.println("Pick a higher quantity!");
     }
+
     return false;
   }
 
   public boolean removeFromCart(int id, int quantity) {
-    if (quantity > 0 && this.products.hasId(id)) {
+    if (this.products.hasId(id)) {
       if (this.shoppingCart.containsKey(id)) {
         int currentAmmount = this.shoppingCart.get(id);
         if (currentAmmount > quantity) {
@@ -61,7 +66,10 @@ public class ShoppingCart {
         " was removed from the shopping cart"
       );
       return true;
+    } else {
+      System.out.println("Not a valid id! please enter a valid one.");
     }
+
     return false;
   }
 
