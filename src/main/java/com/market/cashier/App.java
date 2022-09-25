@@ -26,6 +26,7 @@ public class App {
           //Based in the "use ..." calls the "terminalCommands" function passing an Lambda with the commands for that choice.
           switch (inputs[1]) {
             case "owner":
+            if(products.loginOwner())
               terminalCommands(
                 (String[] commands, String command) -> {
                   switch (commands[0]) {

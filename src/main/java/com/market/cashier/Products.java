@@ -7,6 +7,8 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import java.util.Random;
+import java.util.Scanner;
+
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -17,6 +19,9 @@ public class Products {
   private MongoClient client;
   private MongoDatabase database;
   private MongoCollection<Document> products;
+  private String ownerPassword = "admin";
+  private Scanner scanner = new Scanner(System.in);
+  private boolean logedIn = false;
 
   //Initializes the data base and connects to 27017 -> Market -> Products.
   Products() {
@@ -58,8 +63,16 @@ public class Products {
     }
   }
 
+  public boolean loginOwner(){
+    System.out.print("Password: ");
+    String bufferPassword = scanner.nextLine();
+    this.logedIn = bufferPassword.equals(this.ownerPassword);
+    if(!this.logedIn) System.out.println("wrong password");
+    return this.logedIn;
+  }
   //adds a product to the database based on the parametters given
   public boolean addProduct(String name, String ammount, double price) {
+    if(this.logedIn){
     if (price > 0) {
       try {
         Document newProduct = new Document("id", newUniqueId())
@@ -78,19 +91,22 @@ public class Products {
       return false;
     }
   }
+  else return false;
+}
 
   //removes the product from the database based from the id given
   public boolean removeProduct(int id) {
+    if(this.logedIn){
     if (this.hasId(id)) {
       try {
         Bson filter = Filters.eq("id", id);
-        this.products.deleteOne(filter);
         System.out.println(
           this.getOneInfo(id).get("name") + " was removed from products!"
         );
+        this.products.deleteOne(filter);
         return true;
       } catch (Exception err) {
-        System.out.println(id + " is not a valid id!");
+      System.out.println("Error removing product! try again.");
         return false;
       }
     } else {
@@ -98,6 +114,8 @@ public class Products {
       return false;
     }
   }
+  else return false;
+}
 
   // returns a boolean saying if the informed id exists in the database or not
   public boolean hasId(int id) {
@@ -109,7 +127,7 @@ public class Products {
       System.out.println("Error looking for id! try again.");
       return false;
     }
-  }
+}
 
   // Returns an id that doesn't exist in the datatbase from 1 to 100
   private int newUniqueId() {

@@ -6,15 +6,12 @@ import java.util.Map;
 import org.bson.Document;
 
 public class ShoppingCart {
-
   private Map<Integer, Integer> shoppingCart;
   private Products products;
-  private double totalPrice;
 
   public ShoppingCart(Products products) {
     this.shoppingCart = new HashMap<Integer, Integer>();
     this.products = products;
-    this.totalPrice = 0;
   }
 
   //Adds an item to shopping cart based on id
