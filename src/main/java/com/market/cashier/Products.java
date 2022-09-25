@@ -7,6 +7,7 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import java.util.Random;
+
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -25,7 +26,7 @@ public class Products {
       database = client.getDatabase("Market");
       products = database.getCollection("Products");
       System.out.println("Connected to database...");
-    } catch (Error err) {
+    } catch (Exception err) {
       System.err.println(err);
     }
   }
@@ -48,6 +49,8 @@ public class Products {
           currentItem.get("price")
         );
       }
+    }catch(Exception err){
+      System.out.println("Error showing products! try again.");
     } finally {
       cursor.close();
       System.out.println("----------------");
@@ -65,8 +68,8 @@ public class Products {
         this.products.insertOne(newProduct);
         System.out.println(name + " was successfully added to the database.");
         return true;
-      } catch (Error err) {
-        System.err.println(err + " - something wrong happened");
+      } catch (Exception err) {
+        System.out.println(name+ " could not be added to the database!");
         return false;
       }
     } else {
@@ -81,9 +84,10 @@ public class Products {
       try {
         Bson filter = Filters.eq("id", id);
         this.products.deleteOne(filter);
+        System.out.println(this.getOneInfo(id).get("name") + " was removed from products!");
         return true;
-      } catch (Error err) {
-        System.err.println(err);
+      } catch (Exception err) {
+        System.out.println(id + " is not a valid id!");
         return false;
       }
     } else {
@@ -98,8 +102,8 @@ public class Products {
       Bson filter = Filters.eq("id", id);
       MongoCursor cursor = this.products.find(filter).iterator();
       return cursor.hasNext();
-    } catch (Error err) {
-      System.err.println(err);
+    } catch (Exception err) {
+      System.out.println("Error looking for id! try again.");
       return false;
     }
   }

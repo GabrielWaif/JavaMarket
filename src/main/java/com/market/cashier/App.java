@@ -33,9 +33,9 @@ public class App {
                       products.showProducts();
                       break;
                     case "add":
-                      try {
-                        String[] parameters = command.split("\"");
+                      String[] parameters = command.split("\"");
 
+                      if (parameters.length == 4) {
                         String name = parameters[1];
                         String description = parameters[3];
                         double price = Double.parseDouble(
@@ -45,9 +45,19 @@ public class App {
                         if (!(name == "" || name == "")) {
                           products.addProduct(name, description, price);
                         } else invalidCommand(command);
-                      } catch (Error err) {
+                      } else {
                         invalidCommand(command);
                       }
+                      break;
+                    case "remove":
+                    try{
+                      int id = Integer.parseInt(commands[1]);
+
+                      products.removeProduct(id);
+                    }
+                    catch(Exception err){
+                      invalidCommand(command);
+                    }
                       break;
                     default:
                       invalidCommand(command);
@@ -57,7 +67,6 @@ public class App {
                 "Owner"
               );
               break;
-
             case "cart":
               terminalCommands(
                 (String[] commands, String command) -> {
