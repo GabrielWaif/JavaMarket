@@ -128,5 +128,9 @@ public class ShoppingCart {
         )
       )
     );
+    if (this.apliedCupom != null) {
+      this.products.removeCupom(apliedCupom);
+      this.apliedCupom = null;
+    }
   }
 }

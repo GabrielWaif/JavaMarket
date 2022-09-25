@@ -12,9 +12,16 @@ public class App {
   //Global scannner object
   private static Scanner scanner = new Scanner(System.in);
 
+  //Help text variables
+  private static String marketHelp =
+    "-----------------------\nMarket commands description:\n-----------------------\nuse owner - will ask the owner password and then will enter owner command terminal\n\nuse cart - will enter the shopping cart command terminal\n\nexit - Exits the program\n-----------------------";
+  private static String ownerHelp =
+    "-----------------------\nOwner commands description:\n-----------------------\nshow products - Shows every products that is in the database\n\nshow cupons - Shows every cupom that is in the database\n\nadd product - Receives 2 strings and a number as parameters and adds them to the database. Example: add product \"name\" \"amount\" 10\n\nadd cupom - Receives 1 string  and a number from 0.1 -> 0.99 Adds a cupom to the database. Example: add cupom \"name\" 0.25\n\nremove product - Receives an id as parameters and removes the item with that id from the database. Example: add product \"name\" \"amount\" 10\n\nremove cupom - Receives a string and removes the cupom with that code. Example: add cupom \"name\" 0.25\n\nexit - Exits from the owner commands\n-----------------------";
+  private static String cartHelp =
+    "-----------------------\nShopping cart commands description:\n-----------------------\nshow - Shows the current shopping cart with the price of everything\n\nadd - Receives an id and an amount. Adds to the cart the product with the given id Example: add 10\n\nremove - Receives an id and an amount. Removes from the cart the product with the given id Example: add 10 2\n\ncupom - Receives an string and applies the cupom with that code. Example: use \"code\".\n\npay - Pays the current cart price\n\nexit - Exits the shopping cart commands\n-----------------------";
+
   public static void main(String[] args) {
     String userInput = "";
-
     //Loop that reads the terminal input that is used to choosee the menu(owner/cart) until he exits.
     do {
       System.out.print("Market/> ");
@@ -22,7 +29,9 @@ public class App {
       if (!userInput.replace(" ", "").equals("exit")) {
         //Storage the user input in args[]
         String[] inputs = userInput.split(" ");
-        if (inputs[0].equals("use")) {
+        if (userInput.equals("help")) System.out.println(marketHelp); else if (
+          inputs[0].equals("use")
+        ) {
           //Based in the "use ..." calls the "terminalCommands" function passing an Lambda with the commands for that choice.
           switch (inputs[1]) {
             case "owner":
@@ -66,7 +75,8 @@ public class App {
                       break;
                   }
                 },
-                "Owner"
+                "Owner",
+                ownerHelp
               );
               break;
             case "cart":
@@ -104,7 +114,8 @@ public class App {
                       break;
                   }
                 },
-                "Cart"
+                "Cart",
+                cartHelp
               );
               break;
             default:
@@ -124,7 +135,8 @@ public class App {
   //Loops through the user input calling the commands based in the Consumer passed through the main function
   static void terminalCommands(
     BiConsumer<String[], String> func,
-    String terminalPath
+    String terminalPath,
+    String help
   ) {
     String command = "";
     do {
@@ -133,7 +145,9 @@ public class App {
       String[] args = command.split(" ");
 
       if (!command.equals("exit") && args.length > 0) {
-        func.accept(args, command);
+        if (command.equals("help")) {
+          System.out.println(help);
+        } else func.accept(args, command);
       } else {
         System.out.println("exiting " + terminalPath.toLowerCase() + "...");
         if (terminalPath.equals("Owner")) products.logout();
