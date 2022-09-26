@@ -1,5 +1,6 @@
 package com.market.cashier;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.function.BiConsumer;
 
@@ -26,6 +27,10 @@ public class App {
     do {
       System.out.print("Market/> ");
       userInput = scanner.nextLine();
+      String[] teste = getArgs(userInput);
+      for(String t : teste){
+        System.out.println(t);
+      }
       if (!userInput.replace(" ", "").equals("exit")) {
         //Storage the user input in args[]
         String[] inputs = userInput.split(" ");
@@ -49,17 +54,16 @@ public class App {
                       String[] parameters = command.split("\"");
 
                       if (commands[1].equals("cupom")) {
-                        try{
+                        try {
                           String code = parameters[1];
-                          double value = Double.parseDouble(parameters[2].replace(" ", ""));
+                          double value = Double.parseDouble(
+                            parameters[2].replace(" ", "")
+                          );
                           products.addCupom(code, value);
-                        }
-                        catch(Exception err){
+                        } catch (Exception err) {
                           invalidCommand(command);
                         }
-                      } else if (
-                        commands[1].equals("product")
-                      ) {
+                      } else if (commands[1].equals("product")) {
                         try {
                           String name = parameters[1];
                           String description = parameters[3];
@@ -75,26 +79,23 @@ public class App {
                       } else invalidCommand(command);
                       break;
                     case "remove":
-                    if(commands[1].equals("product")){
-                      try {
-                        int id = Integer.parseInt(commands[1]);
+                      if (commands[1].equals("product")) {
+                        try {
+                          int id = Integer.parseInt(commands[1]);
 
-                        products.removeProduct(id);
-                      } catch (Exception err) {
-                        invalidCommand(command);
-                      }
-                    }
-                    else if(commands[1].equals("cupom")){
-                      try{
-                        String[] parameter = command.split("\"");
-                        String code = parameter[1];
-                        products.removeCupom(code);
-                      }
-                      catch(Exception err){
-                        invalidCommand(command);
-                      }
-                    }
-                    else invalidCommand(command);
+                          products.removeProduct(id);
+                        } catch (Exception err) {
+                          invalidCommand(command);
+                        }
+                      } else if (commands[1].equals("cupom")) {
+                        try {
+                          String[] parameter = command.split("\"");
+                          String code = parameter[1];
+                          products.removeCupom(code);
+                        } catch (Exception err) {
+                          invalidCommand(command);
+                        }
+                      } else invalidCommand(command);
                       break;
                     default:
                       invalidCommand(command);
@@ -134,6 +135,8 @@ public class App {
                       break;
                     case "pay":
                       shoppingCart.payCart();
+                      break;
+                    case "cupom":
                       break;
                     default:
                       invalidCommand(command);
@@ -179,5 +182,47 @@ public class App {
         if (terminalPath.equals("Owner")) products.logout();
       }
     } while (!command.equals("exit"));
+  }
+
+  public static String[] getArgs(String command){
+    boolean isInside = false;
+    String[] characters = command.split("");
+    ArrayList<String> res = new ArrayList<String>();
+    String currentWord = "";
+    String prevCharacter = " ";
+    for(int i = 0; i<characters.length; i++){
+      if(isInside){
+        if(characters[i].equals("\"")){
+          isInside = false;
+          res.add(currentWord);
+          currentWord = "";
+          continue;
+        }
+        else{
+          currentWord += characters[i];
+        }
+      }
+      else{
+        if(characters[i].equals(" ") && (prevCharacter.equals(" ") || prevCharacter.equals("\""))){
+          continue;
+        }
+        else if(characters[i].equals(" ")){
+          res.add(currentWord);
+          currentWord = "";
+        }
+        else if(characters[i].equals("\"")){
+          isInside = true;
+        }
+        else if(i == characters.length-1){
+          res.add(currentWord);
+          continue;
+        }
+        else{
+          currentWord += characters[i];
+        }
+      }
+      prevCharacter = characters[i];
+    }
+    return res.toArray(new String[res.size()]);
   }
 }
