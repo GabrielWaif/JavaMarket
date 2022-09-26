@@ -39,12 +39,27 @@ public class App {
                 (String[] commands, String command) -> {
                   switch (commands[0]) {
                     case "show":
-                      products.showProducts();
+                      if (
+                        commands[1].equals("products")
+                      ) products.showProducts(); else if (
+                        commands[1].equals("cupons")
+                      ) products.showCupons(); else invalidCommand(command);
                       break;
                     case "add":
                       String[] parameters = command.split("\"");
 
-                      if (parameters.length == 5) {
+                      if (commands[1].equals("cupom")) {
+                        try{
+                          String code = parameters[1];
+                          double value = Double.parseDouble(parameters[2].replace(" ", ""));
+                          products.addCupom(code, value);
+                        }
+                        catch(Exception err){
+                          invalidCommand(command);
+                        }
+                      } else if (
+                        commands[1].equals("product")
+                      ) {
                         try {
                           String name = parameters[1];
                           String description = parameters[3];
@@ -57,11 +72,10 @@ public class App {
                         } catch (Exception err) {
                           invalidCommand(command);
                         }
-                      } else {
-                        invalidCommand(command);
-                      }
+                      } else invalidCommand(command);
                       break;
                     case "remove":
+                    if(commands[1].equals("product")){
                       try {
                         int id = Integer.parseInt(commands[1]);
 
@@ -69,6 +83,18 @@ public class App {
                       } catch (Exception err) {
                         invalidCommand(command);
                       }
+                    }
+                    else if(commands[1].equals("cupom")){
+                      try{
+                        String[] parameter = command.split("\"");
+                        String code = parameter[1];
+                        products.removeCupom(code);
+                      }
+                      catch(Exception err){
+                        invalidCommand(command);
+                      }
+                    }
+                    else invalidCommand(command);
                       break;
                     default:
                       invalidCommand(command);
