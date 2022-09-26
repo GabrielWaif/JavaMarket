@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.function.BiConsumer;
 
-import javax.swing.tree.ExpandVetoException;
-
 public class App {
 
   //Class instances of the created objects
@@ -42,35 +40,40 @@ public class App {
                 (String[] commands, String command) -> {
                   switch (commands[0]) {
                     case "show":
-                      if (
-                        commands[1].equals("products")
-                      ) products.showProducts(); else if (
-                        commands[1].equals("cupons")
-                      ) products.showCupons(); else invalidCommand(command);
+                      if (commands.length == 2) {
+                        if (
+                          commands[1].equals("products")
+                        ) products.showProducts(); else if (
+                          commands[1].equals("cupons")
+                        ) products.showCupons(); else invalidCommand(command);
+                      } else invalidCommand(command);
                       break;
                     case "add":
-                      if (commands[1].equals("cupom")) {
-                        try {
-                          String code = commands[2];
-                          double value = Double.parseDouble(commands[3]);
-                          products.addCupom(code, value);
-                        } catch (Exception err) {
-                          invalidCommand(command);
-                        }
-                      } else if (commands[1].equals("product")) {
-                        try {
-                          String name = commands[2];
-                          String description = commands[3];
-                          double price = Double.parseDouble(commands[4]);
-                          if (!(name == "" || description == "")) {
-                            products.addProduct(name, description, price);
-                          } else invalidCommand(command);
-                        } catch (Exception err) {
-                          invalidCommand(command);
-                        }
+                      if (commands.length > 2) {
+                        if (commands[1].equals("cupom")) {
+                          try {
+                            String code = commands[2];
+                            double value = Double.parseDouble(commands[3]);
+                            products.addCupom(code, value);
+                          } catch (Exception err) {
+                            invalidCommand(command);
+                          }
+                        } else if (commands[1].equals("product")) {
+                          try {
+                            String name = commands[2];
+                            String description = commands[3];
+                            double price = Double.parseDouble(commands[4]);
+                            if (!(name == "" || description == "")) {
+                              products.addProduct(name, description, price);
+                            } else invalidCommand(command);
+                          } catch (Exception err) {
+                            invalidCommand(command);
+                          }
+                        } else invalidCommand(command);
                       } else invalidCommand(command);
                       break;
                     case "remove":
+                    if(commands.length>2){
                       if (commands[1].equals("product")) {
                         try {
                           int id = Integer.parseInt(commands[2]);
@@ -87,6 +90,7 @@ public class App {
                           invalidCommand(command);
                         }
                       } else invalidCommand(command);
+} else invalidCommand(command);
                       break;
                     default:
                       invalidCommand(command);
@@ -128,13 +132,12 @@ public class App {
                       shoppingCart.payCart();
                       break;
                     case "cupom":
-                    try{
-                      String code = commands[1];
-                      shoppingCart.applyCupom(code);
-                    }
-                    catch(Exception err){
-                      invalidCommand(command);
-                    }
+                      try {
+                        String code = commands[1];
+                        shoppingCart.applyCupom(code);
+                      } catch (Exception err) {
+                        invalidCommand(command);
+                      }
                       break;
                     default:
                       invalidCommand(command);

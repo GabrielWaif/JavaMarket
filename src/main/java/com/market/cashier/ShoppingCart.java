@@ -107,6 +107,7 @@ public class ShoppingCart {
   public void payCart() {
     double totalValue = 0;
     Iterator listQuantity = this.shoppingCart.entrySet().iterator();
+    if(listQuantity.hasNext()){
     while (listQuantity.hasNext()) {
       Map.Entry quantityItem = (Map.Entry) listQuantity.next();
       Document productInfo =
@@ -131,6 +132,10 @@ public class ShoppingCart {
     if (this.apliedCupom != null) {
       this.products.removeCupom(apliedCupom);
       this.apliedCupom = null;
+    }
+    }
+    else{
+      System.out.println("Nothing in the cart! Add something before buying.");
     }
   }
 
