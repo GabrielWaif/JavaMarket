@@ -36,7 +36,9 @@ public class Products {
     }
   }
 
-  //Shows all products that are in the database - sorted by id
+  /**
+   * Shows this info of all products that are in the datavase - sorted by id number.
+   */
   public void showProducts() {
     System.out.println("----------------");
     System.out.println("Products:");
@@ -64,6 +66,12 @@ public class Products {
     }
   }
 
+  /**
+   * Scans the nextLine user input looking for the owner password, changing the logedIn variable to true if correct.
+   *
+   * @return
+   *         A boolean if the given passwarod if correct.
+   */
   public boolean loginOwner() {
     System.out.print("Password: ");
     String bufferPassword = scanner.nextLine();
@@ -72,14 +80,28 @@ public class Products {
     return this.logedIn;
   }
 
-  //adds a product to the database based on the parametters given
-  public boolean addProduct(String name, String ammount, double price) {
+  /**
+   * Adds a product to the database based on the parametters given.
+   *
+   * @param  name
+   *         The name of the products on the database Example: Milk.
+   *
+   * @param  amount
+   *         The ammount / size of the product that will be bough according to the price Example: 100ml.
+   *
+   * @param  price
+   *         The price of the product.
+   *
+   * @return
+   *         A boolean if the product was successfully added to the database.
+   */
+  public boolean addProduct(String name, String amount, double price) {
     if (this.logedIn) {
       if (price > 0) {
         try {
           Document newProduct = new Document("id", newUniqueId())
             .append("name", name)
-            .append("ammount", ammount)
+            .append("ammount", amount)
             .append("price", price);
           this.products.insertOne(newProduct);
           System.out.println(name + " was successfully added to the database.");
@@ -95,7 +117,15 @@ public class Products {
     } else return false;
   }
 
-  //removes the product from the database based from the id given
+  /**
+   * Removes a product from the databased based on the given id.
+   *
+   * @param  id
+   *         The id of the product that will be deleted.
+   *
+   * @return
+   *         A boolean if the product was successfully removed from the database.
+   */
   public boolean removeProduct(int id) {
     if (this.logedIn) {
       if (this.hasId(id)) {
@@ -117,7 +147,15 @@ public class Products {
     } else return false;
   }
 
-  // returns a boolean saying if the informed id exists in the database or not
+  /**
+   * Checks if the database already has a product with the given id.
+   *
+   * @param  id
+   *         The id that will be checked.
+   *
+   * @return
+   *         A boolean if the id exists on the database.
+   */
   public boolean hasId(int id) {
     try {
       Bson filter = Filters.eq("id", id);
@@ -129,19 +167,42 @@ public class Products {
     }
   }
 
-  // Returns an id that doesn't exist in the datatbase from 1 to 100
+  /**
+   * Generates a random unique id that ranges from 1-100 an isn't in the database.
+   *
+   * @return
+   *         Integer new id.
+   */
   private int newUniqueId() {
     Random r = new Random();
     int newId = r.nextInt(100) + 1;
     if (this.hasId(newId)) return newUniqueId(); else return newId;
   }
 
+  /**
+   * Seraches for an product with the given id in the database and returns a document with all that info.
+   *
+   * @param  id
+   *         The id that will be searched.
+   *
+   * @return
+   *         Document with all the info of the found id or null if nothing found.
+   */
   public Document getOneInfo(int id) {
     Bson filter = Filters.eq("id", id);
     MongoCursor cursor = this.products.find(filter).iterator();
-    return (Document) cursor.next();
+    if (cursor.hasNext()) return (Document) cursor.next(); else return null;
   }
 
+  /**
+   * Searches for the existance of an cupom in the database based on the cupom code given.
+   *
+   * @param  cupom
+   *         The code of the cupom that will be searched.
+   *
+   * @return
+   *         A boolean if the cupom exists in the databaase.
+   */
   public boolean hasCupom(String cupom) {
     try {
       Bson filter = Filters.eq("code", cupom);
@@ -153,6 +214,15 @@ public class Products {
     }
   }
 
+  /**
+   * Gets the discount value of the given cupom.
+   *
+   * @param  cupom
+   *         The cupom code of the cupom that will be searched.
+   *
+   * @return
+   *         An double of the discunt value of the code given or 0 if nothing found.
+   */
   public double cupomValue(String cupom) {
     try {
       Bson filter = Filters.eq("code", cupom);
@@ -164,6 +234,18 @@ public class Products {
     }
   }
 
+  /**
+   * Adds a cupom to the database with the parameters given.
+   *
+   * @param  cupom
+   *         The cupom code of the new cupom that will be added.
+   *
+   * @param  price
+   *         The cupom discount percentage of the new cupom that will be added.
+   *
+   * @return
+   *         A boolean if the cupom was successfully added to the database.
+   */
   public boolean addCupom(String cupom, double discount) {
     if (this.logedIn) {
       if (!this.hasCupom(cupom)) {
@@ -184,6 +266,15 @@ public class Products {
     } else return false;
   }
 
+  /**
+   * Removes a product from the database with the given cupom code.
+   *
+   * @param  cupom
+   *         The cupom code of the cupom that will be removed.
+   *
+   * @return
+   *         A boolean if the cupom was successfully removed from the database.
+   */
   public boolean removeCupom(String cupom) {
     if (this.logedIn) {
       if (this.hasCupom(cupom)) {
@@ -203,6 +294,9 @@ public class Products {
     } else return false;
   }
 
+  /**
+   * Shows the info of all cupom that are in the database.
+   */
   public void showCupons() {
     if (this.logedIn) {
       try {
@@ -226,6 +320,9 @@ public class Products {
     }
   }
 
+  /**
+   * Swiched the logedIn variable to false.
+   */
   public void logout() {
     this.logedIn = false;
   }
