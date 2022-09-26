@@ -27,13 +27,9 @@ public class App {
     do {
       System.out.print("Market/> ");
       userInput = scanner.nextLine();
-      String[] teste = getArgs(userInput);
-      for(String t : teste){
-        System.out.println(t);
-      }
       if (!userInput.replace(" ", "").equals("exit")) {
         //Storage the user input in args[]
-        String[] inputs = userInput.split(" ");
+        String[] inputs = getArgs(userInput);
         if (userInput.equals("help")) System.out.println(marketHelp); else if (
           inputs[0].equals("use")
         ) {
@@ -51,25 +47,19 @@ public class App {
                       ) products.showCupons(); else invalidCommand(command);
                       break;
                     case "add":
-                      String[] parameters = command.split("\"");
-
                       if (commands[1].equals("cupom")) {
                         try {
-                          String code = parameters[1];
-                          double value = Double.parseDouble(
-                            parameters[2].replace(" ", "")
-                          );
+                          String code = commands[2];
+                          double value = Double.parseDouble(commands[3]);
                           products.addCupom(code, value);
                         } catch (Exception err) {
                           invalidCommand(command);
                         }
                       } else if (commands[1].equals("product")) {
                         try {
-                          String name = parameters[1];
-                          String description = parameters[3];
-                          double price = Double.parseDouble(
-                            parameters[4].replace(" ", "")
-                          );
+                          String name = commands[2];
+                          String description = commands[3];
+                          double price = Double.parseDouble(commands[4]);
                           if (!(name == "" || description == "")) {
                             products.addProduct(name, description, price);
                           } else invalidCommand(command);
@@ -81,7 +71,7 @@ public class App {
                     case "remove":
                       if (commands[1].equals("product")) {
                         try {
-                          int id = Integer.parseInt(commands[1]);
+                          int id = Integer.parseInt(commands[2]);
 
                           products.removeProduct(id);
                         } catch (Exception err) {
@@ -89,8 +79,7 @@ public class App {
                         }
                       } else if (commands[1].equals("cupom")) {
                         try {
-                          String[] parameter = command.split("\"");
-                          String code = parameter[1];
+                          String code = commands[2];
                           products.removeCupom(code);
                         } catch (Exception err) {
                           invalidCommand(command);
@@ -171,7 +160,7 @@ public class App {
     do {
       System.out.print(terminalPath + "/> ");
       command = scanner.nextLine();
-      String[] args = command.split(" ");
+      String[] args = getArgs(command);
 
       if (!command.equals("exit") && args.length > 0) {
         if (command.equals("help")) {
@@ -184,40 +173,34 @@ public class App {
     } while (!command.equals("exit"));
   }
 
-  public static String[] getArgs(String command){
+  public static String[] getArgs(String command) {
     boolean isInside = false;
     String[] characters = command.split("");
     ArrayList<String> res = new ArrayList<String>();
     String currentWord = "";
     String prevCharacter = " ";
-    for(int i = 0; i<characters.length; i++){
-      if(isInside){
-        if(characters[i].equals("\"")){
+    for (int i = 0; i < characters.length; i++) {
+      if (isInside) {
+        if (characters[i].equals("\"")) {
           isInside = false;
           res.add(currentWord);
           currentWord = "";
-          continue;
-        }
-        else{
+        } else {
           currentWord += characters[i];
         }
-      }
-      else{
-        if(characters[i].equals(" ") && (prevCharacter.equals(" ") || prevCharacter.equals("\""))){
-          continue;
-        }
-        else if(characters[i].equals(" ")){
+      } else {
+        if (
+          characters[i].equals(" ") &&
+          (prevCharacter.equals(" ") || prevCharacter.equals("\""))
+        ) {} else if (characters[i].equals(" ")) {
           res.add(currentWord);
           currentWord = "";
-        }
-        else if(characters[i].equals("\"")){
+        } else if (characters[i].equals("\"")) {
           isInside = true;
-        }
-        else if(i == characters.length-1){
+        } else if (i == characters.length - 1) {
+          currentWord += characters[i];
           res.add(currentWord);
-          continue;
-        }
-        else{
+        } else {
           currentWord += characters[i];
         }
       }
