@@ -133,4 +133,16 @@ public class ShoppingCart {
       this.apliedCupom = null;
     }
   }
+
+  public boolean applyCupom(String code){
+    if(this.products.hasCupom(code)){
+      this.apliedCupom = code;
+      System.out.println(code+ " cupom applied!");
+      return true;
+    }
+    else {
+      System.out.println("Cupom doesn't exist! enter a valid code.");
+      return false;
+    }
+  }
 }

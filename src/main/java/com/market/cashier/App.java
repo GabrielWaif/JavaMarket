@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.function.BiConsumer;
 
+import javax.swing.tree.ExpandVetoException;
+
 public class App {
 
   //Class instances of the created objects
@@ -126,6 +128,13 @@ public class App {
                       shoppingCart.payCart();
                       break;
                     case "cupom":
+                    try{
+                      String code = commands[1];
+                      shoppingCart.applyCupom(code);
+                    }
+                    catch(Exception err){
+                      invalidCommand(command);
+                    }
                       break;
                     default:
                       invalidCommand(command);
