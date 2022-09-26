@@ -17,7 +17,18 @@ public class ShoppingCart {
     this.apliedCupom = null;
   }
 
-  //Adds an item to shopping cart based on id
+  /**
+   * Adds an database product to the shoppingCart list with the given its id and the quantity.
+   *
+   * @param  id
+   *         The id of the product that will be added.
+   *
+   * @param  quantity
+   *         The quantity of the product that will be added to the shopping cart.
+   *
+   * @return
+   *         A boolean if the product was successfully added to the shopping cart List.
+   */
   public boolean addToCart(int id, int quantity) {
     if (quantity > 0) {
       if (this.products.hasId(id)) {
@@ -41,6 +52,18 @@ public class ShoppingCart {
     return false;
   }
 
+  /**
+   * Removes the quantiny given of the given product from the shoppingCart list based on the id and quantity given.
+   *
+   * @param  id
+   *         The id of the product that will be removed.
+   *
+   * @param  quantity
+   *         The quantity of the product that will be removed from the shopping cart.
+   *
+   * @return
+   *         A boolean if the product was successfully removed from the shopping cart List.
+   */
   public boolean removeFromCart(int id, int quantity) {
     if (this.products.hasId(id)) {
       if (this.shoppingCart.containsKey(id)) {
@@ -73,6 +96,9 @@ public class ShoppingCart {
     return false;
   }
 
+  /**
+   * Shows the price, name and quantity of every product in the database, the total price and any discounts based in the given cupom.
+   */
   public void showCart() {
     double totalValue = 0;
     Iterator listQuantity = this.shoppingCart.entrySet().iterator();
@@ -104,6 +130,9 @@ public class ShoppingCart {
     } else System.out.println("Total: $" + totalValue);
   }
 
+  /**
+   * Pays toatl price of the shopping cart with its discounts, clears the shopping cart list and removes the used cupom from the database.
+   */
   public void payCart() {
     double totalValue = 0;
     Iterator listQuantity = this.shoppingCart.entrySet().iterator();
@@ -139,6 +168,15 @@ public class ShoppingCart {
     }
   }
 
+  /**
+   * Applies the discount cupom with the given code to the total price of the shopping cart.
+   *
+   * @param  code
+   *         The cupom code of the cupom that will be applied.
+   *
+   * @return
+   *         A boolean if the cupom was successfully applied.
+   */
   public boolean applyCupom(String code){
     if(this.products.hasCupom(code)){
       this.apliedCupom = code;

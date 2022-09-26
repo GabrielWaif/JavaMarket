@@ -157,12 +157,27 @@ public class App {
     } while (!userInput.replace(" ", "").equals("exit"));
   }
 
-  //Prints the user input telling him that it isn't a valid command
+  /**
+   * Prints that the given command is invalid Example: "command is not a valid command!" 
+   *
+   * @param  command
+   *         The full string of the user's command.
+   *
+   */
   static void invalidCommand(String command) {
     System.out.println(command + " is not a valid command!");
   }
 
-  //Loops through the user input calling the commands based in the Consumer passed through the main function
+  /**
+   * Loops the user input calling the commands given in the BiConsumer<String[], String> given.
+   *
+   * @param  func
+   *         An BiConsumer<String[], String> callback function that will recive the full command String and each arg of the String.
+   *
+   * @param  terminalPath
+   *         A string of the name of the menu that the user is currently Example: "Owner"
+   *
+   */
   static void terminalCommands(
     BiConsumer<String[], String> func,
     String terminalPath,
@@ -185,6 +200,15 @@ public class App {
     } while (!command.equals("exit"));
   }
 
+  /**
+   * Gives all the args that were on a String in String[] format. Args are all the elements divided by " " or inside "".
+   *
+   * @param  command
+   *         The full String command that the user gave.
+   *
+   * @return
+   *         A String[] with all the args from the full String.
+   */
   public static String[] getArgs(String command) {
     boolean isInside = false;
     String[] characters = command.split("");
