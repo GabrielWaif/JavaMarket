@@ -17,9 +17,9 @@ public class App {
   private static String marketHelp =
     "-----------------------\nMarket commands description:\n-----------------------\nuse owner - will ask the owner password and then will enter owner command terminal\n\nuse cart - will enter the shopping cart command terminal\n\nexit - Exits the program\n-----------------------";
   private static String ownerHelp =
-    "-----------------------\nOwner commands description:\n-----------------------\nshow products - Shows every products that is in the database\n\nshow cupons - Shows every cupom that is in the database\n\nadd product - Receives 2 strings and a number as parameters and adds them to the database. Example: add product \"name\" \"amount\" 10\n\nadd cupom - Receives 1 string  and a number from 0.1 -> 0.99 Adds a cupom to the database. Example: add cupom \"name\" 0.25\n\nremove product - Receives an id as parameters and removes the item with that id from the database. Example: add product \"name\" \"amount\" 10\n\nremove cupom - Receives a string and removes the cupom with that code. Example: add cupom \"name\" 0.25\n\nexit - Exits from the owner commands\n-----------------------";
+    "-----------------------\nOwner commands description:\n-----------------------\nshow products - Shows every products that is in the database\n\nshow coupons - Shows every coupon that is in the database\n\nadd product - Receives 2 strings and a number as parameters and adds them to the database. Example: add product \"name\" \"amount\" 10\n\nadd coupon - Receives 1 string  and a number from 0.1 -> 0.99 Adds a coupon to the database. Example: add coupon \"name\" 0.25\n\nremove product - Receives an id as parameters and removes the item with that id from the database. Example: add product \"name\" \"amount\" 10\n\nremove coupon - Receives a string and removes the coupon with that code. Example: add coupon \"name\" 0.25\n\nexit - Exits from the owner commands\n-----------------------";
   private static String cartHelp =
-    "-----------------------\nShopping cart commands description:\n-----------------------\nshow - Shows the current shopping cart with the price of everything\n\nadd - Receives an id and an amount. Adds to the cart the product with the given id Example: add 10\n\nremove - Receives an id and an amount. Removes from the cart the product with the given id Example: add 10 2\n\ncupom - Receives an string and applies the cupom with that code. Example: use \"code\".\n\npay - Pays the current cart price\n\nexit - Exits the shopping cart commands\n-----------------------";
+    "-----------------------\nShopping cart commands description:\n-----------------------\nshow - Shows the current shopping cart with the price of everything\n\nadd - Receives an id and an amount. Adds to the cart the product with the given id Example: add 10\n\nremove - Receives an id and an amount. Removes from the cart the product with the given id Example: add 10 2\n\ncoupon - Receives an string and applies the coupon with that code. Example: use \"code\".\n\npay - Pays the current cart price\n\nexit - Exits the shopping cart commands\n-----------------------";
 
   public static void main(String[] args) {
     if (!products.getConnectionStatus()) return;
@@ -46,17 +46,17 @@ public class App {
                         if (
                           commands[1].equals("products")
                         ) products.showProducts(); else if (
-                          commands[1].equals("cupons")
-                        ) products.showCupons(); else invalidCommand(command);
+                          commands[1].equals("coupons")
+                        ) products.showCoupons(); else invalidCommand(command);
                       } else invalidCommand(command);
                       break;
                     case "add":
                       if (commands.length > 2) {
-                        if (commands[1].equals("cupom")) {
+                        if (commands[1].equals("coupon")) {
                           try {
                             String code = commands[2];
                             double value = Double.parseDouble(commands[3]);
-                            products.addCupom(code, value);
+                            products.addCoupon(code, value);
                           } catch (Exception err) {
                             invalidCommand(command);
                           }
@@ -84,10 +84,10 @@ public class App {
                           } catch (Exception err) {
                             invalidCommand(command);
                           }
-                        } else if (commands[1].equals("cupom")) {
+                        } else if (commands[1].equals("coupon")) {
                           try {
                             String code = commands[2];
-                            products.removeCupom(code);
+                            products.removecoupon(code);
                           } catch (Exception err) {
                             invalidCommand(command);
                           }
@@ -133,10 +133,10 @@ public class App {
                     case "pay":
                       shoppingCart.payCart();
                       break;
-                    case "cupom":
+                    case "coupon":
                       try {
                         String code = commands[1];
-                        shoppingCart.applyCupom(code);
+                        shoppingCart.applyCoupon(code);
                       } catch (Exception err) {
                         invalidCommand(command);
                       }

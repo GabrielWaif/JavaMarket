@@ -18,7 +18,7 @@ public class Products {
   private MongoClient client;
   private MongoDatabase database;
   private MongoCollection<Document> products;
-  private MongoCollection<Document> cupons;
+  private MongoCollection<Document> coupons;
   private String ownerPassword = "admin";
   private Scanner scanner = new Scanner(System.in);
   private boolean logedIn = false;
@@ -30,7 +30,7 @@ public class Products {
       client = MongoClients.create(uri);
       database = client.getDatabase("Market");
       products = database.getCollection("Products");
-      cupons = database.getCollection("Cupons");
+      coupons = database.getCollection("Coupons");
       System.out.println("Trying to connect to the database...");
       database.runCommand(new Document("serverStatus", 1));
       System.out.println("Connected to database.");
@@ -203,127 +203,127 @@ public class Products {
   }
 
   /**
-   * Searches for the existance of an cupom in the database based on the cupom code given.
+   * Searches for the existance of an coupon in the database based on the coupon code given.
    *
-   * @param  cupom
-   *         The code of the cupom that will be searched.
+   * @param  coupon
+   *         The code of the coupon that will be searched.
    *
    * @return
-   *         A boolean if the cupom exists in the databaase.
+   *         A boolean if the coupon exists in the databaase.
    */
-  public boolean hasCupom(String cupom) {
+  public boolean hasCoupon(String coupon) {
     try {
-      Bson filter = Filters.eq("code", cupom);
-      MongoCursor cursor = this.cupons.find(filter).iterator();
+      Bson filter = Filters.eq("code", coupon);
+      MongoCursor cursor = this.coupons.find(filter).iterator();
       return cursor.hasNext();
     } catch (Exception err) {
-      System.out.println("Error looking for cupom! Try again.");
+      System.out.println("Error looking for coupon! Try again.");
       return false;
     }
   }
 
   /**
-   * Gets the discount value of the given cupom.
+   * Gets the discount value of the given coupon.
    *
-   * @param  cupom
-   *         The cupom code of the cupom that will be searched.
+   * @param  coupon
+   *         The coupon code of the coupon that will be searched.
    *
    * @return
    *         An double of the discunt value of the code given or 0 if nothing found.
    */
-  public double cupomValue(String cupom) {
+  public double couponValue(String coupon) {
     try {
-      Bson filter = Filters.eq("code", cupom);
-      MongoCursor cursor = this.cupons.find(filter).iterator();
-      Document dCupom = (Document) cursor.next();
-      return (Double) dCupom.get("value");
+      Bson filter = Filters.eq("code", coupon);
+      MongoCursor cursor = this.coupons.find(filter).iterator();
+      Document dcoupon = (Document) cursor.next();
+      return (Double) dcoupon.get("value");
     } catch (Exception err) {
       return 0;
     }
   }
 
   /**
-   * Adds a cupom to the database with the parameters given.
+   * Adds a coupon to the database with the parameters given.
    *
-   * @param  cupom
-   *         The cupom code of the new cupom that will be added.
+   * @param  coupon
+   *         The coupon code of the new coupon that will be added.
    *
    * @param  price
-   *         The cupom discount percentage of the new cupom that will be added.
+   *         The coupon discount percentage of the new coupon that will be added.
    *
    * @return
-   *         A boolean if the cupom was successfully added to the database.
+   *         A boolean if the coupon was successfully added to the database.
    */
-  public boolean addCupom(String cupom, double discount) {
+  public boolean addCoupon(String coupon, double discount) {
     if (this.logedIn) {
-      if (!this.hasCupom(cupom)) {
+      if (!this.hasCoupon(coupon)) {
         if (discount > 0 && discount < 1) {
-          Document newCupom = new Document("code", cupom)
+          Document newcoupon = new Document("code", coupon)
           .append("value", discount);
-          cupons.insertOne(newCupom);
-          System.out.println("Cupom " + cupom + " successfully added!");
+          coupons.insertOne(newcoupon);
+          System.out.println("coupon " + coupon + " successfully added!");
           return true;
         } else {
-          System.out.println("Invalid cupom discount value!");
+          System.out.println("Invalid coupon discount value!");
           return false;
         }
       } else {
-        System.out.println("That cupom already exists! Pick a new name.");
+        System.out.println("That coupon already exists! Pick a new name.");
         return false;
       }
     } else return false;
   }
 
   /**
-   * Removes a product from the database with the given cupom code.
+   * Removes a product from the database with the given coupon code.
    *
-   * @param  cupom
-   *         The cupom code of the cupom that will be removed.
+   * @param  coupon
+   *         The coupon code of the coupon that will be removed.
    *
    * @return
-   *         A boolean if the cupom was successfully removed from the database.
+   *         A boolean if the coupon was successfully removed from the database.
    */
-  public boolean removeCupom(String cupom) {
+  public boolean removecoupon(String coupon) {
     if (this.logedIn) {
-      if (this.hasCupom(cupom)) {
+      if (this.hasCoupon(coupon)) {
         try {
-          Bson filter = Filters.eq("code", cupom);
-          this.cupons.deleteOne(filter);
-          System.out.println(cupom + " was removed from cupons!");
+          Bson filter = Filters.eq("code", coupon);
+          this.coupons.deleteOne(filter);
+          System.out.println(coupon + " was removed from coupons!");
           return true;
         } catch (Exception err) {
-          System.out.println("Error removing cupom! try again.");
+          System.out.println("Error removing coupon! try again.");
           return false;
         }
       } else {
-        System.out.println("Cupom doesn't exist! Please enter a valid one.");
+        System.out.println("coupon doesn't exist! Please enter a valid one.");
         return false;
       }
     } else return false;
   }
 
   /**
-   * Shows the info of all cupom that are in the database.
+   * Shows the info of all coupon that are in the database.
    */
-  public void showCupons() {
+  public void showCoupons() {
     if (this.logedIn) {
       try {
-        MongoCursor bufferCupons = cupons.find().iterator();
+        MongoCursor buffercoupons = coupons.find().iterator();
         System.out.println("---------------");
-        System.out.println("Cupons:");
+        System.out.println("coupons:");
         System.out.println("---------------");
-        while (bufferCupons.hasNext()) {
-          Document currentCupom = (Document) bufferCupons.next();
+        while (buffercoupons.hasNext()) {
+          Document currentcoupon = (Document) buffercoupons.next();
           System.out.println(
-            currentCupom.get("code") +
+            currentcoupon.get("code") +
             " - " +
-            (((Double) (currentCupom.get("value"))) * 100) +
+            (((Double) (currentcoupon.get("value"))) * 100) +
             "%"
           );
         }
         System.out.println("---------------");
       } catch (Exception err) {
-        System.out.println("Error looking for cupons! try again.");
+        System.out.println("Error looking for coupons! try again.");
       }
     }
   }

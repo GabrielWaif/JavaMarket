@@ -9,12 +9,12 @@ public class ShoppingCart {
 
   private Map<Integer, Integer> shoppingCart;
   private Products products;
-  private String apliedCupom;
+  private String appliedCoupon;
 
   public ShoppingCart(Products products) {
     this.shoppingCart = new HashMap<Integer, Integer>();
     this.products = products;
-    this.apliedCupom = null;
+    this.appliedCoupon = null;
   }
 
   /**
@@ -97,7 +97,7 @@ public class ShoppingCart {
   }
 
   /**
-   * Shows the price, name and quantity of every product in the database, the total price and any discounts based in the given cupom.
+   * Shows the price, name and quantity of every product in the database, the total price and any discounts based in the given coupon.
    */
   public void showCart() {
     double totalValue = 0;
@@ -122,16 +122,16 @@ public class ShoppingCart {
       );
     }
     System.out.println("-----------------");
-    if (this.apliedCupom != null) {
+    if (this.appliedCoupon != null) {
       System.out.println("Valor inicial: $" + totalValue);
-      double desconto = this.products.cupomValue(this.apliedCupom) * totalValue;
+      double desconto = this.products.couponValue(this.appliedCoupon) * totalValue;
       System.out.println("Desconto: $-" + desconto);
       System.out.println("Valor final: $" + (totalValue - desconto));
     } else System.out.println("Total: $" + totalValue);
   }
 
   /**
-   * Pays toatl price of the shopping cart with its discounts, clears the shopping cart list and removes the used cupom from the database.
+   * Pays toatl price of the shopping cart with its discounts, clears the shopping cart list and removes the used coupon from the database.
    */
   public void payCart() {
     double totalValue = 0;
@@ -152,15 +152,15 @@ public class ShoppingCart {
         (
           totalValue *
           (
-            this.apliedCupom == null
+            this.appliedCoupon == null
               ? 1
-              : (1 - this.products.cupomValue(this.apliedCupom))
+              : (1 - this.products.couponValue(this.appliedCoupon))
           )
         )
       );
-      if (this.apliedCupom != null) {
-        this.products.removeCupom(apliedCupom);
-        this.apliedCupom = null;
+      if (this.appliedCoupon != null) {
+        this.products.removecoupon(appliedCoupon);
+        this.appliedCoupon = null;
       }
     } else {
       System.out.println("Nothing in the cart! Add something before buying.");
@@ -168,21 +168,21 @@ public class ShoppingCart {
   }
 
   /**
-   * Applies the discount cupom with the given code to the total price of the shopping cart.
+   * Applies the discount coupon with the given code to the total price of the shopping cart.
    *
    * @param  code
-   *         The cupom code of the cupom that will be applied.
+   *         The coupon code of the coupon that will be applied.
    *
    * @return
-   *         A boolean if the cupom was successfully applied.
+   *         A boolean if the coupon was successfully applied.
    */
-  public boolean applyCupom(String code) {
-    if (this.products.hasCupom(code)) {
-      this.apliedCupom = code;
-      System.out.println(code + " cupom applied!");
+  public boolean applyCoupon(String code) {
+    if (this.products.hasCoupon(code)) {
+      this.appliedCoupon = code;
+      System.out.println(code + " coupon applied!");
       return true;
     } else {
-      System.out.println("Cupom doesn't exist! enter a valid code.");
+      System.out.println("coupon doesn't exist! enter a valid code.");
       return false;
     }
   }
