@@ -70,6 +70,11 @@ Inside any of the terminals, you can use "exit" to quit.
 exit
 ```
 
+The help commando will show you the commands that you can do in the current enviroment.
+```sh
+help
+```
+
 ## Market commands
 
 | Command   | Description                                                                 |
@@ -84,8 +89,8 @@ exit
 |----------------|----------------------------------------------------------------------------------------------------------------------------------|
 | show products  | Shows every product that is in the database                                                                                     |
 | show coupons    | Shows every coupon that is in the database                                                                                        |
-| add product    | Receives 2 strings and a number as parameters and adds them to the database. Example: add product \"name\" \"amount\" 10         |
-| add custom      | and a number from 0.1 -> 0.99 Adds a coupon to the database. Example: add coupon \"name\" 0.25                                     |
+| add product    | Receives 2 strings and a number as parameters(name, amount, price) and adds them to the database. Example: add product \"name\" \"amount\" 10         |
+| add custom      | Receives a string and a number from 0.1 -> 0.99 Adds a coupon to the database. Example: add coupon \"name\" 0.25                                     |
 | remove product | Receives an id as parameters and removes the item with that id from the database. Example: remove product \"name\" \"amount\" 10 |
 | remove coupon   | Receives a string and removes the coupon with that code. Example: add coupon \"name\" 0.25                                         |
 | exit           | Exits from the owner commands                                                                                                    |
