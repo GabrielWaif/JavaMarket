@@ -136,34 +136,33 @@ public class ShoppingCart {
   public void payCart() {
     double totalValue = 0;
     Iterator listQuantity = this.shoppingCart.entrySet().iterator();
-    if(listQuantity.hasNext()){
-    while (listQuantity.hasNext()) {
-      Map.Entry quantityItem = (Map.Entry) listQuantity.next();
-      Document productInfo =
-        this.products.getOneInfo((int) quantityItem.getKey());
-      double itemPrice =
-        Double.parseDouble(quantityItem.getValue().toString()) *
-        ((Double) productInfo.get("price"));
-      totalValue += itemPrice;
-    }
-    this.shoppingCart.clear();
-    System.out.println(
-      "Purchcase made with a value of $" +
-      (
-        totalValue *
+    if (listQuantity.hasNext()) {
+      while (listQuantity.hasNext()) {
+        Map.Entry quantityItem = (Map.Entry) listQuantity.next();
+        Document productInfo =
+          this.products.getOneInfo((int) quantityItem.getKey());
+        double itemPrice =
+          Double.parseDouble(quantityItem.getValue().toString()) *
+          ((Double) productInfo.get("price"));
+        totalValue += itemPrice;
+      }
+      this.shoppingCart.clear();
+      System.out.println(
+        "Purchcase made with a value of $" +
         (
-          this.apliedCupom == null
-            ? 1
-            : (1 - this.products.cupomValue(this.apliedCupom))
+          totalValue *
+          (
+            this.apliedCupom == null
+              ? 1
+              : (1 - this.products.cupomValue(this.apliedCupom))
+          )
         )
-      )
-    );
-    if (this.apliedCupom != null) {
-      this.products.removeCupom(apliedCupom);
-      this.apliedCupom = null;
-    }
-    }
-    else{
+      );
+      if (this.apliedCupom != null) {
+        this.products.removeCupom(apliedCupom);
+        this.apliedCupom = null;
+      }
+    } else {
       System.out.println("Nothing in the cart! Add something before buying.");
     }
   }
@@ -177,13 +176,12 @@ public class ShoppingCart {
    * @return
    *         A boolean if the cupom was successfully applied.
    */
-  public boolean applyCupom(String code){
-    if(this.products.hasCupom(code)){
+  public boolean applyCupom(String code) {
+    if (this.products.hasCupom(code)) {
       this.apliedCupom = code;
-      System.out.println(code+ " cupom applied!");
+      System.out.println(code + " cupom applied!");
       return true;
-    }
-    else {
+    } else {
       System.out.println("Cupom doesn't exist! enter a valid code.");
       return false;
     }

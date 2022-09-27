@@ -73,24 +73,24 @@ public class App {
                       } else invalidCommand(command);
                       break;
                     case "remove":
-                    if(commands.length>2){
-                      if (commands[1].equals("product")) {
-                        try {
-                          int id = Integer.parseInt(commands[2]);
+                      if (commands.length > 2) {
+                        if (commands[1].equals("product")) {
+                          try {
+                            int id = Integer.parseInt(commands[2]);
 
-                          products.removeProduct(id);
-                        } catch (Exception err) {
-                          invalidCommand(command);
-                        }
-                      } else if (commands[1].equals("cupom")) {
-                        try {
-                          String code = commands[2];
-                          products.removeCupom(code);
-                        } catch (Exception err) {
-                          invalidCommand(command);
-                        }
+                            products.removeProduct(id);
+                          } catch (Exception err) {
+                            invalidCommand(command);
+                          }
+                        } else if (commands[1].equals("cupom")) {
+                          try {
+                            String code = commands[2];
+                            products.removeCupom(code);
+                          } catch (Exception err) {
+                            invalidCommand(command);
+                          }
+                        } else invalidCommand(command);
                       } else invalidCommand(command);
-} else invalidCommand(command);
                       break;
                     default:
                       invalidCommand(command);
@@ -158,7 +158,7 @@ public class App {
   }
 
   /**
-   * Prints that the given command is invalid Example: "command is not a valid command!" 
+   * Prints that the given command is invalid Example: "command is not a valid command!"
    *
    * @param  command
    *         The full string of the user's command.
