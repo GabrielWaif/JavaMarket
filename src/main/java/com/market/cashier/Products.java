@@ -22,6 +22,7 @@ public class Products {
   private String ownerPassword = "admin";
   private Scanner scanner = new Scanner(System.in);
   private boolean logedIn = false;
+  private boolean connected = false;
 
   //Initializes the data base and connects to 27017 -> Market -> Products.
   Products() {
@@ -30,9 +31,16 @@ public class Products {
       database = client.getDatabase("Market");
       products = database.getCollection("Products");
       cupons = database.getCollection("Cupons");
-      System.out.println("Connected to database...");
+      System.out.println("Trying to connect to the database...");
+      database.runCommand(new Document("serverStatus", 1));
+      System.out.println("Connected to database.");
+      this.connected = true;
     } catch (Exception err) {
-      System.err.println(err);
+      System.out.println(
+        "Connection error! Check if your local mongo db is running at \"" +
+        uri +
+        "\"."
+      );
     }
   }
 
@@ -325,5 +333,9 @@ public class Products {
    */
   public void logout() {
     this.logedIn = false;
+  }
+
+  public boolean getConnectionStatus() {
+    return this.connected;
   }
 }

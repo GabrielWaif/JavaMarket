@@ -22,7 +22,9 @@ public class App {
     "-----------------------\nShopping cart commands description:\n-----------------------\nshow - Shows the current shopping cart with the price of everything\n\nadd - Receives an id and an amount. Adds to the cart the product with the given id Example: add 10\n\nremove - Receives an id and an amount. Removes from the cart the product with the given id Example: add 10 2\n\ncupom - Receives an string and applies the cupom with that code. Example: use \"code\".\n\npay - Pays the current cart price\n\nexit - Exits the shopping cart commands\n-----------------------";
 
   public static void main(String[] args) {
+    if (!products.getConnectionStatus()) return;
     String userInput = "";
+
     //Loop that reads the terminal input that is used to choosee the menu(owner/cart) until he exits.
     do {
       System.out.print("Market/> ");
